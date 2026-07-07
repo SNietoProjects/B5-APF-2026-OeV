@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Tema 5 Específico — Decreto 30/2025, Atención a la Ciudadanía | Opositar en Valencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --naranja: #d97706; --naranja-claro: #fef3c7; --naranja-borde: #f59e0b;
+    --azul-oscuro: #1e293b; --texto: #374151; --texto-suave: #6b7280;
+    --borde: #e5e7eb; --fondo: #fafaf9; --blanco: #ffffff;
+    --verde: #166534; --verde-bg: #f0fdf4; --verde-borde: #86efac;
+    --rojo: #991b1b; --rojo-bg: #fef2f2; --rojo-borde: #fca5a5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--fondo); color: var(--texto); min-height: 100vh; font-size: 16px; line-height: 1.6; }
+  header { background: var(--blanco); border-bottom: 1px solid var(--borde); }
+  .header-top { max-width: 860px; margin: 0 auto; padding: 1.4rem 1.5rem 1rem; display: flex; align-items: flex-start; gap: 1.2rem; }
+  .header-logo { width: 48px; height: 48px; border-radius: 8px; object-fit: contain; flex-shrink: 0; }
+  .header-textos { flex: 1; }
+  .header-site { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--naranja); font-weight: 600; margin-bottom: 3px; }
+  .header-titulo { font-family: 'Lora', serif; font-size: clamp(1.2rem, 3.5vw, 1.7rem); font-weight: 700; color: var(--azul-oscuro); line-height: 1.2; }
+  .header-sub { font-size: 0.88rem; color: var(--texto-suave); margin-top: 4px; }
+  .header-meta { background: var(--naranja-claro); border-top: 1px solid #fde68a; padding: 0.55rem 1.5rem; }
+  .header-meta-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; font-size: 0.83rem; color: #92400e; font-weight: 500; }
+  .barra-wrap { position: sticky; top: 0; z-index: 100; background: var(--blanco); border-bottom: 1px solid var(--borde); padding: 0.6rem 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .barra-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; }
+  .barra-track { flex: 1; height: 6px; background: #f3f4f6; border-radius: 99px; overflow: hidden; }
+  .barra-fill { height: 100%; background: var(--naranja); border-radius: 99px; transition: width 0.35s ease; width: 0%; }
+  .barra-num { font-size: 13px; font-weight: 600; color: var(--azul-oscuro); white-space: nowrap; min-width: 52px; }
+  .barra-score { font-size: 13px; color: var(--texto-suave); white-space: nowrap; }
+  .barra-score .ok { color: var(--verde); font-weight: 600; }
+  .barra-score .ko { color: var(--rojo); font-weight: 600; }
+  main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+  .card { background: var(--blanco); border: 1px solid var(--borde); border-radius: 10px; padding: 1.5rem 1.6rem; margin-bottom: 1.4rem; transition: box-shadow 0.2s; }
+  .card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.06); }
+  .card-num { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--naranja); margin-bottom: 0.5rem; }
+  .card-pregunta { font-family: 'Lora', serif; font-size: 1rem; font-weight: 600; line-height: 1.55; color: var(--azul-oscuro); margin-bottom: 1.1rem; }
+  .opciones { display: flex; flex-direction: column; gap: 0.45rem; }
+  .opcion { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.7rem 1rem; border: 1.5px solid var(--borde); border-radius: 7px; cursor: pointer; background: var(--blanco); text-align: left; font-family: 'Source Sans 3', sans-serif; font-size: 0.93rem; color: var(--texto); line-height: 1.5; transition: border-color 0.15s, background 0.15s; width: 100%; }
+  .opcion:hover:not(:disabled) { border-color: var(--naranja-borde); background: var(--naranja-claro); }
+  .opcion .letra { font-weight: 700; color: var(--naranja); min-width: 18px; font-size: 0.85rem; margin-top: 2px; flex-shrink: 0; }
+  .opcion.correcta { border-color: var(--verde-borde); background: var(--verde-bg); color: var(--verde); }
+  .opcion.correcta .letra { color: #15803d; }
+  .opcion.incorrecta { border-color: var(--rojo-borde); background: var(--rojo-bg); color: var(--rojo); }
+  .opcion.incorrecta .letra { color: var(--rojo); }
+  .opcion:disabled { cursor: default; }
+  .explicacion { display: none; margin-top: 1rem; padding: 0.9rem 1rem 0.9rem 1.1rem; background: #fffbeb; border-left: 3px solid var(--naranja); border-radius: 0 6px 6px 0; font-size: 0.875rem; line-height: 1.65; color: var(--texto); }
+  .explicacion.visible { display: block; animation: fadeIn 0.22s ease; }
+  .explicacion strong { color: var(--azul-oscuro); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+  .resultado { display: none; background: var(--blanco); border: 1px solid var(--borde); border-radius: 12px; padding: 2.5rem 2rem 2rem; margin: 1.5rem 0 2rem; text-align: center; }
+  .resultado.visible { display: block; animation: fadeIn 0.3s ease; }
+  .resultado-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--naranja); font-weight: 600; margin-bottom: 0.5rem; }
+  .resultado h2 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 700; color: var(--azul-oscuro); margin-bottom: 0.3rem; }
+  .resultado-nota { font-size: 3.2rem; font-weight: 700; color: var(--azul-oscuro); line-height: 1; margin: 1rem 0 0.3rem; font-family: 'Lora', serif; }
+  .resultado-nota span { color: var(--naranja); }
+  .calif-badge { display: inline-block; padding: 5px 16px; border-radius: 99px; font-size: 0.9rem; font-weight: 600; margin: 0.6rem 0 1.5rem; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 0 0 1.5rem; }
+  .stat { background: var(--fondo); border: 1px solid var(--borde); border-radius: 8px; padding: 0.9rem 0.5rem; }
+  .stat-num { font-size: 1.9rem; font-weight: 700; font-family: 'Lora', serif; }
+  .stat-lab { font-size: 0.78rem; color: var(--texto-suave); margin-top: 2px; }
+  .resultado-hint { font-size: 0.85rem; color: var(--texto-suave); margin-bottom: 1.2rem; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0.7rem 1.6rem; border-radius: 7px; font-family: 'Source Sans 3', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.18s; }
+  .btn-naranja { background: var(--naranja); color: white; }
+  .btn-naranja:hover { background: #b45309; transform: translateY(-1px); }
+  .divider { text-align: center; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--texto-suave); margin: 2rem 0 1.5rem; display: flex; align-items: center; gap: 1rem; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--borde); }
+  @media (max-width: 580px) { main { padding: 1.2rem 1rem 4rem; } .card { padding: 1.1rem; } .stats { grid-template-columns: 1fr 1fr; } .header-top { padding: 1rem; gap: 0.8rem; } .header-meta { padding: 0.5rem 1rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <img class="header-logo"
+      src="https://opositorgva.wordpress.com/wp-content/uploads/2024/04/cropped-opositar-en-valencia-logo-sin-fondo.png"
+      alt="Opositar en Valencia" onerror="this.style.display='none'">
+    <div class="header-textos">
+      <div class="header-site">Opositar en Valencia · GVA · Parte Específica</div>
+      <div class="header-titulo">Tema 5 — Decreto 30/2025, Atención a la Ciudadanía y Oficinas PROP</div>
+      <div class="header-sub">Título II (sistema de atención) · Título IV (canales presencial y telefónico) · Subalterno APT-APF</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="header-meta-inner">
+      <span>📋 50 preguntas</span>
+      <span>🎯 Nivel medio-alto</span>
+      <span>🔀 Orden aleatorio en cada intento</span>
+      <span>✅ Explicación en cada respuesta</span>
+    </div>
+  </div>
+</header>
+
+<div class="barra-wrap">
+  <div class="barra-inner">
+    <div class="barra-track"><div class="barra-fill" id="barraFill"></div></div>
+    <span class="barra-num" id="barraNum">0 / 50</span>
+    <span class="barra-score"><span class="ok" id="scoreOk">✓ 0</span> &nbsp;<span class="ko" id="scoreKo">✗ 0</span></span>
+  </div>
+</div>
+
+<main id="mainContent"></main>
+
+<script>
+const BANCO = [
+  {
+    p: "Según el artículo 3.2 del Decreto 30/2025, ¿de qué elementos se compone el sistema de atención a la ciudadanía?",
+    ops: ["Únicamente de las oficinas PROP y el servicio telefónico 012", "Del sistema de información para la atención a la ciudadanía y los canales de atención a la ciudadanía", "De las oficinas de registro y los servicios de administración electrónica", "Del catálogo de procedimientos y la sede electrónica de la Generalitat"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 3.2 del Decreto 30/2025 establece que el sistema de atención a la ciudadanía está compuesto por el sistema de información para la atención a la ciudadanía y los canales de atención a la ciudadanía. Estos dos elementos configuran de forma integral el modelo de relación de la Generalitat con la ciudadanía."
+  },
+  {
+    p: "¿Cuántos principios rigen la atención a la ciudadanía, según el artículo 4 del Decreto 30/2025?",
+    ops: ["Cinco principios", "Seis principios", "Ocho principios", "Diez principios"],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El art. 4 del Decreto 30/2025 enumera ocho principios: 1) orientación de servicio a la ciudadanía; 2) sencillez y proximidad; 3) proactividad; 4) equidad; 5) transparencia; 6) excelencia y mejora continua; 7) innovación y creatividad; 8) colaboración y cooperación."
+  },
+  {
+    p: "¿Qué implica el principio de 'proactividad' en la atención a la ciudadanía, según el artículo 4.3 del Decreto 30/2025?",
+    ops: ["Responder únicamente cuando la ciudadanía formula una consulta expresa", "Buscar, siempre que sea posible, anticiparse a las necesidades de los ciudadanos y ciudadanas frente a un enfoque reactivo", "Publicar de forma proactiva toda la información administrativa en el Portal de Transparencia", "Realizar encuestas periódicas de satisfacción a la ciudadanía sobre los servicios prestados"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 4.3 del Decreto 30/2025 define la proactividad como la búsqueda, siempre que sea posible, de la anticipación a las necesidades de la ciudadanía frente a un enfoque meramente reactivo. Este principio impulsa a la Administración a adelantarse a las demandas ciudadanas en lugar de esperar a que se formulen."
+  },
+  {
+    p: "Según el artículo 4.4 del Decreto 30/2025, ¿qué garantiza el principio de equidad en el acceso a la información y los servicios públicos?",
+    ops: ["Que todos los ciudadanos reciban idéntica atención con independencia de sus circunstancias personales, sin adaptaciones específicas", "El acceso equitativo con independencia del lugar de residencia, disponibilidad de medios, nivel de conocimientos tecnológicos o lengua oficial utilizada, junto con la accesibilidad física, sensorial y cognitiva", "Que el coste de los servicios de atención sea idéntico en todas las oficinas de la Comunitat Valenciana", "La igualdad salarial entre el personal de las distintas oficinas de atención a la ciudadanía"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 4.4 del Decreto 30/2025 establece que el principio de equidad garantiza el acceso a la información y los servicios públicos con independencia del lugar de residencia, la disponibilidad de medios y nivel de conocimientos tecnológicos, o la lengua oficial utilizada, así como la accesibilidad física, sensorial y cognitiva para garantizar la igualdad y no discriminación."
+  },
+  {
+    p: "¿Qué establece el artículo 4.5 del Decreto 30/2025 sobre el principio de transparencia?",
+    ops: ["Que toda la información administrativa debe publicarse sin ninguna excepción posible", "Que la actividad pública debe garantizar el acceso a la información, siendo las restricciones una excepción que solo puede fundamentarse en la protección de otros derechos", "Que la transparencia solo se aplica a los procedimientos de contratación pública", "Que el acceso a la información pública requiere siempre la acreditación de un interés legítimo"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 4.5 del Decreto 30/2025 establece que la actividad pública debe garantizar el acceso a la información, siendo una excepción las restricciones a ésta, que solo podrán fundamentarse en la protección de otros derechos, según los principios de la normativa de transparencia. La regla es el acceso; la restricción es la excepción justificada."
+  },
+  {
+    p: "¿Qué derecho reconoce el artículo 5.1.a) del Decreto 30/2025 a la ciudadanía respecto al canal de atención?",
+    ops: ["El derecho a exigir atención presencial en cualquier procedimiento, con independencia de su naturaleza", "El derecho a elegir el canal de atención, salvo que resulte obligatorio el uso de uno concreto según la normativa específica del procedimiento", "El derecho a que la Administración le asigne el canal más adecuado según su perfil sociodemográfico", "El derecho a utilizar exclusivamente medios electrónicos en todos sus trámites con la Generalitat"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 5.1.a) del Decreto 30/2025 reconoce el derecho a elegir el canal de atención para relacionarse con el sistema, salvo que resulte obligatorio el uso de uno concreto en virtud de la normativa específica del procedimiento. Además, la Administración debe asistir en el uso de medios electrónicos a quienes no estén obligados a usarlos."
+  },
+  {
+    p: "Según el artículo 5.1.b) del Decreto 30/2025, ¿qué datos de carácter personal debe aportar la ciudadanía en sus trámites?",
+    ops: ["Todos los que le sean solicitados, con independencia de su relación con el procedimiento concreto", "Únicamente los que sean exigidos y tratados en el marco de las finalidades previstas en el procedimiento o actuación, sin perjuicio de poder aportar cualquier documento adicional que estime conveniente", "Solo datos identificativos básicos, quedando excluida cualquier otra categoría de datos personales", "Los datos que determine discrecionalmente el funcionario que tramita el expediente"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 5.1.b) del Decreto 30/2025 reconoce el derecho de la ciudadanía a aportar únicamente los datos personales exigidos y tratados en el marco de las finalidades previstas en el procedimiento o actuación de que se trate, sin perjuicio de que pueda aportar cualquier documento que estime conveniente."
+  },
+  {
+    p: "¿Cuál de los siguientes NO es un derecho que el sistema de atención a la ciudadanía garantiza a las personas usuarias, según el artículo 5.2 del Decreto 30/2025?",
+    ops: ["Un trato respetuoso y considerado", "Atención de acuerdo con sus características personales, especialmente personas mayores, con discapacidad o afectadas por la brecha digital", "El derecho a una compensación económica en caso de demora en la tramitación de su expediente", "Posibilidad de acceso a la identidad de las personas que realizan las funciones de asistencia y atención ciudadana"],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El art. 5.2 del Decreto 30/2025 no reconoce ningún derecho a compensación económica por demoras. Los derechos que sí garantiza son: trato respetuoso y considerado (a), atención según características personales (b), diligencia (c), y posibilidad de conocer la identidad del personal y autoridades responsables (d)."
+  },
+  {
+    p: "Según el artículo 5.3 del Decreto 30/2025, ¿cómo deben actuar los ciudadanos en sus relaciones con el sistema de atención a la ciudadanía?",
+    ops: ["Sin ninguna obligación específica, dado que se trata de un servicio público universal y gratuito", "Manteniendo una actitud respetuosa, colaborando con veracidad y exactitud, respetando horarios y funcionamiento, y cuidando los espacios y equipamientos públicos", "Solo están obligados a presentar la documentación requerida, sin más deberes adicionales", "Únicamente deben identificarse correctamente ante el personal de atención"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 5.3 del Decreto 30/2025 establece cuatro conductas exigibles a la ciudadanía: a) mantener actitud respetuosa hacia el personal y demás usuarios; b) colaborar facilitando datos veraces y exactos; c) respetar horarios y funcionamiento, atendiendo las indicaciones del personal; d) cuidar y respetar los espacios y equipamientos públicos."
+  },
+  {
+    p: "Según el artículo 6.1 del Decreto 30/2025, ¿en qué lengua se dirige la Administración de la Generalitat a la ciudadanía en cualquiera de los canales de atención?",
+    ops: ["Siempre en castellano, como lengua oficial del Estado", "En la lengua oficial que el ciudadano o ciudadana haya indicado", "En valenciano por defecto, salvo solicitud expresa de cambio a castellano", "En la lengua que determine el funcionario que atienda la consulta"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 6.1 del Decreto 30/2025 establece que la Administración de la Generalitat, en su relación con la ciudadanía en cualquiera de los canales de atención, se dirigirá al ciudadano o ciudadana en la lengua oficial que haya indicado, respetando así el derecho a la libre elección lingüística entre valenciano y castellano."
+  },
+  {
+    p: "¿Cuáles son los tres grandes canales de atención a la ciudadanía previstos en el artículo 14.2 del Decreto 30/2025?",
+    ops: ["Presencial, postal y telemático", "Presencial, telefónico y digital", "Presencial, digital y por correo electrónico exclusivamente", "Telefónico, digital y por videoconferencia"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 14.2 del Decreto 30/2025 establece tres canales de atención: a) presencial (oficinas PROP, puntos PROP, oficinas de registro, oficinas de atención especializada); b) telefónico (servicio 012 y teléfonos especializados); c) digital (sede PROP, correo electrónico, mensajería instantánea, videollamada y otros)."
+  },
+  {
+    p: "Según el artículo 15 del Decreto 30/2025, ¿hacia qué objetivo se orienta el acompañamiento general a la ciudadanía en el sistema de atención?",
+    ops: ["Reducir el número de oficinas presenciales, priorizando la atención digital exclusivamente", "Garantizar la igualdad y no discriminación en el acceso y uso de los servicios públicos, y el derecho a elegir el medio de relación con la Administración, favoreciendo la inclusión digital", "Incrementar la recaudación de tasas administrativas mediante la digitalización de trámites", "Sustituir progresivamente al personal de atención presencial por sistemas automatizados"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 15 del Decreto 30/2025 establece que todo el sistema de atención, en sus diversos canales, está orientado a garantizar la igualdad y no discriminación en el acceso y uso de los servicios públicos, el derecho a elegir el medio de relación con la Administración, eliminando obstáculos de acceso y favoreciendo la inclusión digital."
+  },
+  {
+    p: "¿Qué medidas de accesibilidad universal exige el artículo 16 del Decreto 30/2025 para los diferentes canales de atención?",
+    ops: ["Únicamente la adaptación física de los edificios donde se ubican las oficinas", "La adaptación de los edificios, servicios y canales telefónicos y digitales a la normativa sobre accesibilidad universal, incluyendo información en lengua de signos, formato auditivo o lectura fácil", "Solo la disponibilidad de intérpretes de lengua de signos en las oficinas PROP de las tres capitales de provincia", "La instalación de rampas de acceso en todas las oficinas de atención presencial, sin exigencia de accesibilidad digital"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 16 del Decreto 30/2025 exige que los diferentes canales garanticen la accesibilidad universal a los servicios, adaptando edificios, servicios prestados y canales telefónicos/digitales a la normativa de accesibilidad universal (incluida la digital), disponiendo de información en lengua de signos, formato auditivo o versiones en lectura fácil."
+  },
+  {
+    p: "Según el artículo 17 del Decreto 30/2025, ¿quién define la imagen identificativa de las oficinas PROP y demás canales de atención?",
+    ops: ["El Consell, mediante Decreto específico aprobado anualmente", "La conselleria competente en materia de atención a la ciudadanía, previa autorización del centro directivo competente en materia de publicidad institucional", "Cada Conselleria de forma independiente, según sus propios criterios de identidad corporativa", "El servicio de información telefónica 012, en coordinación con las oficinas PROP"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 17 del Decreto 30/2025 establece que la imagen identificativa de las oficinas PROP, la plataforma 012 y demás canales se define por la conselleria competente en materia de atención a la ciudadanía, previa autorización del centro directivo competente en materia de publicidad institucional, conforme a los criterios de identidad corporativa de la Generalitat."
+  },
+  {
+    p: "¿En cuántas categorías se clasifican las oficinas de atención presencial, según el artículo 18.1 del Decreto 30/2025?",
+    ops: ["Tres categorías", "Cuatro categorías", "Cinco categorías", "Seis categorías"],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El art. 18.1 del Decreto 30/2025 clasifica las oficinas de atención presencial en cinco categorías: a) oficinas PROP de asistencia y atención ciudadana; b) oficinas generales y auxiliares de asistencia en materia de registro; c) oficinas de atención especializada; d) puntos de asistencia PROP; e) otros servicios de información y asistencia presencial."
+  },
+  {
+    p: "Según el artículo 18.4 del Decreto 30/2025, ¿qué oficinas tienen en todo caso el carácter de oficinas de asistencia en materia de registro?",
+    ops: ["Únicamente las oficinas generales y auxiliares de asistencia en materia de registro", "Las oficinas PROP y las oficinas generales y auxiliares de asistencia en materia de registro; también puede atribuirse a las demás por resolución del titular del departamento", "Todas las oficinas de atención presencial sin excepción, con independencia de su categoría", "Solo las oficinas de atención especializada, dada su cualificación técnica"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 18.4 del Decreto 30/2025 establece que las oficinas PROP y las oficinas generales y auxiliares de asistencia en materia de registro (letras a y b del art. 18.1) tienen en todo caso el carácter de oficinas de registro. Este carácter también podrá atribuirse al resto de oficinas por resolución del titular del departamento al que estén adscritas."
+  },
+  {
+    p: "¿Cuál de las siguientes NO es una función de las oficinas de asistencia en materia de registro, según el artículo 18.4 del Decreto 30/2025?",
+    ops: ["La digitalización de documentos presentados presencialmente para su incorporación al expediente electrónico", "La expedición de copias auténticas por personal funcionario habilitado", "La resolución en última instancia de los recursos administrativos interpuestos contra actos de trámite", "Otorgar apoderamiento apud acta mediante comparecencia personal ante personal funcionario habilitado"],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> La resolución de recursos administrativos NO es función de las oficinas de asistencia en materia de registro. El art. 18.4 les atribuye ocho funciones: digitalización, copias auténticas, asistencia en medios electrónicos, apoderamiento apud acta, notificación por comparecencia, expedición de recibos, facilitar código de identificación de órganos, y sistemas de presentación masiva."
+  },
+  {
+    p: "Según el artículo 18.4.a) del Decreto 30/2025, ¿qué ocurre con los documentos originales presentados presencialmente tras su digitalización?",
+    ops: ["Se conservan en la oficina de registro durante un plazo mínimo de un año", "Se devuelven a la persona interesada, salvo cuando la norma determine su custodia por la Administración o resulte obligatoria su presentación en soporte específico no digitalizable", "Se destruyen inmediatamente tras confirmar la correcta digitalización del documento", "Se remiten al Archivo General de la Generalitat para su custodia permanente"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 18.4.a) del Decreto 30/2025 establece que, tras la digitalización, los documentos originales se devuelven a la persona interesada, salvo en los supuestos en que la norma determine la custodia por la Administración de los documentos presentados o resulte obligatoria la presentación de objetos o documentos en soporte específico no susceptible de digitalización."
+  },
+  {
+    p: "¿Qué incluye la asistencia en el uso de medios electrónicos a las personas interesadas, según el artículo 18.4.c) del Decreto 30/2025, cuando éstas no dispongan de los medios necesarios?",
+    ops: ["Únicamente la orientación verbal sobre cómo proceder, sin intervención directa del personal funcionario", "La identificación y firma electrónica del interesado mediante la firma electrónica del personal funcionario habilitado, con el consentimiento expreso del interesado", "La entrega de un dispositivo electrónico en préstamo para que el interesado realice el trámite por sí mismo", "La derivación obligatoria a un punto de asistencia PROP con mayor dotación tecnológica"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 18.4.c) del Decreto 30/2025 establece que la asistencia en el uso de medios electrónicos incluye, cuando el interesado no disponga de medios necesarios y con su consentimiento expreso, su identificación y firma electrónica mediante la firma electrónica del personal funcionario habilitado a estos efectos."
+  },
+  {
+    p: "¿Qué condición tiene el personal funcionario que presta servicios en las oficinas de asistencia en materia de registro, según el artículo 18.5 del Decreto 30/2025?",
+    ops: ["La condición de personal directivo profesional de la Generalitat", "La condición de habilitado para la asistencia en el uso de medios electrónicos", "La condición de personal de confianza del titular de la Conselleria", "La condición de fedatario público a todos los efectos legales"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 18.5 del Decreto 30/2025 establece que el personal funcionario que preste servicios en las oficinas de asistencia en materia de registro tendrá la condición de habilitado para la asistencia en el uso de medios electrónicos, conforme a la normativa de procedimiento administrativo y la normativa autonómica sobre personal funcionario habilitado."
+  },
+  {
+    p: "¿Qué son las oficinas PROP, según el artículo 19.1 del Decreto 30/2025?",
+    ops: ["Oficinas de atención especializada en materia tributaria y de recaudación", "Las oficinas de referencia en la Generalitat para la atención ciudadana, con un catálogo de servicios de información general, ayuda y acompañamiento", "Oficinas exclusivamente dedicadas a la tramitación de expedientes de empleo público", "Oficinas compartidas entre la Generalitat y el Gobierno central para trámites de doble competencia"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 19.1 del Decreto 30/2025 define las oficinas PROP como las oficinas de referencia en la Generalitat para la atención ciudadana, que cuentan con un catálogo de servicios de información general, ayuda y acompañamiento. No deben confundirse con los puntos PROP, que son oficinas compartidas con entidades locales."
+  },
+  {
+    p: "¿De qué departamento dependen orgánica y funcionalmente las oficinas PROP, según el artículo 19.2 del Decreto 30/2025?",
+    ops: ["De cada Conselleria según la materia predominante en cada territorio", "Del departamento competente en materia de atención a la ciudadanía", "De la Presidencia de la Generalitat, con carácter transversal", "De las Diputaciones Provinciales, en régimen de descentralización territorial"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 19.2 del Decreto 30/2025 establece que las oficinas PROP dependen orgánica y funcionalmente del departamento competente en materia de atención a la ciudadanía, al cual corresponde establecer el modelo de funcionamiento y dictar las instrucciones necesarias para su organización."
+  },
+  {
+    p: "¿Qué órgano acuerda la creación, modificación o supresión de las oficinas PROP, según el artículo 19.3 del Decreto 30/2025?",
+    ops: ["El Consell, mediante Decreto aprobado en sesión plenaria", "La persona titular de la Conselleria competente en materia de atención a la ciudadanía, mediante resolución", "Les Corts Valencianes, mediante Ley de acompañamiento presupuestario", "El Ayuntamiento correspondiente, previo informe favorable de la Conselleria competente"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 19.3 del Decreto 30/2025 establece que la creación, modificación o supresión de las oficinas PROP se efectuará mediante resolución de la persona titular de la Conselleria competente en materia de atención a la ciudadanía."
+  },
+  {
+    p: "¿Qué condición tienen los ocupantes de los puestos de trabajo en las oficinas PROP, según el artículo 19.4 del Decreto 30/2025?",
+    ops: ["Únicamente la condición de personal eventual, dado el carácter cambiante de la atención ciudadana", "La condición de personal de atención directa y de personal funcionario habilitado, conforme al Decreto 65/2024", "La condición de personal directivo profesional con nombramiento discrecional", "La condición de personal laboral fijo, con exclusión del personal funcionario"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 19.4 del Decreto 30/2025 establece que los ocupantes de los puestos de las oficinas PROP tendrán la condición de personal de atención directa, así como de personal funcionario habilitado en los términos del Decreto 65/2024, que regula el Registro de personal funcionario habilitado de la Generalitat."
+  },
+  {
+    p: "¿Cuáles son los cuatro elementos mínimos con que deben contar todas las oficinas PROP, según el artículo 19.6 del Decreto 30/2025?",
+    ops: ["Sistema gestor de esperas, servicio de atención en lengua de signos, equipo de autogestión y acceso gratuito a internet", "Cafetería, aparcamiento gratuito, sala de espera climatizada y wifi de alta velocidad", "Sala de reuniones, impresora en color, fotocopiadora y servicio de mensajería", "Buzón de sugerencias, tablón de anuncios, taquillas de custodia y punto de recarga de móviles"],
+    c: 0,
+    exp: "<strong>Respuesta correcta: A.</strong> El art. 19.6 del Decreto 30/2025 establece cuatro elementos mínimos: a) sistema gestor de esperas conectado a la cita previa de la red PROP; b) servicio de atención en lengua de signos para personas con discapacidad auditiva; c) equipo de autogestión (ordenador y escáner); d) acceso gratuito a internet para la ciudadanía."
+  },
+  {
+    p: "¿Cuál de los siguientes servicios NO figura expresamente en el catálogo de servicios mínimo de las oficinas PROP, según el artículo 19.7 del Decreto 30/2025?",
+    ops: ["Acoger y orientar a las personas usuarias identificando sus intereses y necesidades", "Facilitar información sobre las ofertas de empleo público", "Emitir informes jurídicos vinculantes sobre la legalidad de los actos administrativos", "Ofrecer la suscripción al Boletín de Novedades de la Generalitat"],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> La emisión de informes jurídicos vinculantes no es función de las oficinas PROP, que tienen carácter de atención e información, no de asesoramiento jurídico decisorio. El art. 19.7 sí incluye acoger y orientar, información sobre empleo público, y la suscripción al Boletín de Novedades, entre otros diez servicios."
+  },
+  {
+    p: "¿Quién dispone de una oficina general de asistencia en materia de registro, según el artículo 20.1 del Decreto 30/2025?",
+    ops: ["Únicamente la Presidencia de la Generalitat, con carácter centralizado", "Cada departamento de la Administración de la Generalitat, así como cada ente vinculado o dependiente que ejerza potestades administrativas", "Solo los departamentos con sede en la ciudad de Valencia", "Exclusivamente las Consellerias con más de mil empleados públicos adscritos"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 20.1 del Decreto 30/2025 establece que cada departamento de la Administración de la Generalitat, así como cada ente vinculado o dependiente que ejerza potestades administrativas, dispondrá de una oficina general de asistencia en materia de registro."
+  },
+  {
+    p: "Según el artículo 20.3 del Decreto 30/2025, ¿qué ocurre cuando en una misma sede física coinciden varios departamentos o direcciones territoriales y existe una oficina PROP?",
+    ops: ["Deben mantenerse oficinas de registro separadas para cada departamento, sin posibilidad de unificación", "La oficina PROP podrá asumir íntegramente las funciones de oficina de registro, excepto en asuntos que requieran conocimiento especializado de los departamentos allí ubicados", "Se debe crear una nueva oficina especializada que sustituya tanto a la PROP como a las de registro existentes", "La oficina PROP queda automáticamente suprimida y sustituida por las oficinas generales de registro"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 20.3 del Decreto 30/2025 permite que, en estos casos, la oficina PROP asuma íntegramente las funciones de oficina de asistencia en materia de registro, salvo en aquellos asuntos que requieran conocimiento especializado en las materias propias de los departamentos o direcciones territoriales ubicados en la sede."
+  },
+  {
+    p: "¿Cuándo pueden las Consellerías crear oficinas auxiliares de asistencia en materia de registro, según el artículo 20.4 del Decreto 30/2025?",
+    ops: ["Solo cuando lo autorice expresamente el Consell mediante Decreto específico", "Cuando lo consideren necesario para facilitar la presentación de documentos, atendiendo al volumen o naturaleza de la actividad, o para prevenir desplazamientos innecesarios de la ciudadanía", "Únicamente en municipios de más de 20.000 habitantes con sede de la Administración autonómica", "Solo si la oficina general de registro correspondiente supera un determinado volumen de tramitación anual"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 20.4 del Decreto 30/2025 permite a las Consellerías crear oficinas auxiliares de registro en sus centros o unidades cuando lo consideren necesario para facilitar la presentación de solicitudes, atendiendo al volumen o naturaleza de la actividad, o para prevenir un número relevante de desplazamientos de la ciudadanía."
+  },
+  {
+    p: "¿Qué son las oficinas de atención especializada, según el artículo 21.1 del Decreto 30/2025?",
+    ops: ["Oficinas creadas exclusivamente para la atención a personas con discapacidad", "Oficinas adscritas a las consellerías por razón de la materia, que ofrecen información y tramitación de procedimientos específicos que requieren un nivel especializado", "Oficinas destinadas únicamente a la formación del personal funcionario de atención al público", "Oficinas de coordinación entre la Administración autonómica y las entidades locales"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 21.1 del Decreto 30/2025 define las oficinas de atención especializada como aquellas, adscritas a las consellerías correspondientes por razón de la materia, que ofrecen servicios de información y tramitación de procedimientos específicos de su ámbito competencial que requieren un nivel especializado."
+  },
+  {
+    p: "¿Qué son los puntos de asistencia PROP, según el artículo 22.1 del Decreto 30/2025?",
+    ops: ["Oficinas de atención a la ciudadanía compartidas por la Generalitat y una entidad local, en las que se prestan servicios de información y asistencia de ambas administraciones", "Oficinas móviles que se desplazan por el territorio autonómico para prestar asistencia temporal", "Terminales de autoservicio ubicadas en centros comerciales para trámites básicos", "Oficinas gestionadas exclusivamente por organizaciones no gubernamentales colaboradoras"],
+    c: 0,
+    exp: "<strong>Respuesta correcta: A.</strong> El art. 22.1 del Decreto 30/2025 define los puntos de asistencia PROP (puntos PROP) como oficinas de atención compartidas por la Generalitat y una entidad local, en las que se pueden prestar servicios de información y asistencia correspondientes a ambas administraciones."
+  },
+  {
+    p: "¿Cuál es la duración inicial máxima del convenio para la creación de un punto de asistencia PROP, y hasta cuánto puede prorrogarse, según el artículo 22.2 del Decreto 30/2025?",
+    ops: ["Duración inicial de tres años, prorrogables hasta dos años adicionales", "Duración inicial de hasta seis años, prorrogables por un periodo máximo de hasta cuatro años adicionales, con un máximo total de diez años", "Duración inicial de cuatro años, prorrogables indefinidamente por periodos sucesivos de igual duración", "Duración inicial de ocho años, sin posibilidad de prórroga alguna"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 22.2 del Decreto 30/2025 establece que la creación de los puntos PROP se realiza mediante convenio de hasta seis años de duración inicial, prorrogable por un periodo máximo de hasta cuatro años adicionales. Al finalizar el periodo máximo de diez años, debe formalizarse un nuevo convenio."
+  },
+  {
+    p: "¿Qué finalidad tienen los 'otros servicios de información y asistencia presencial' regulados en el artículo 23 del Decreto 30/2025?",
+    ops: ["Sustituir a las oficinas PROP en los municipios de menos de 5.000 habitantes", "Establecer puntos alternativos de información y asistencia, permanentes o móviles, para favorecer la inclusión digital y reducir los desplazamientos, con especial atención a municipios en riesgo de despoblamiento", "Complementar la atención telefónica del servicio 012 en horario nocturno", "Centralizar la tramitación de expedientes de subvenciones en toda la Comunitat Valenciana"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 23 del Decreto 30/2025 establece que estos puntos alternativos, permanentes o móviles, tienen como finalidad favorecer la inclusión digital y reducir los desplazamientos de la ciudadanía, prestando especial atención a las necesidades de los municipios en riesgo de despoblamiento, en colaboración con el centro directivo competente en esa materia."
+  },
+  {
+    p: "¿Cuál es el horario general de atención al público en las oficinas PROP y en las oficinas generales de asistencia en materia de registro, según el artículo 24.1.a) del Decreto 30/2025?",
+    ops: ["De 8h a 14h, de lunes a viernes", "De 9h a 15h, los días hábiles de lunes a viernes", "De 9h a 17h, de lunes a viernes sin excepción", "De 8h a 15h, de lunes a sábado"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 24.1.a) del Decreto 30/2025 establece que en las oficinas PROP y en las oficinas generales de asistencia en materia de registro se atenderá al público los días hábiles de 9h a 15h, de lunes a viernes. Este horario puede ampliarse por resolución del titular de la Conselleria, de forma excepcional y temporal."
+  },
+  {
+    p: "¿En qué franja horaria adicional se atiende al público los jueves en al menos una oficina PROP de cada provincia, según el artículo 24.1.b) del Decreto 30/2025?",
+    ops: ["De 15 a 18 horas, durante todo el año sin excepción", "De 15 a 19 horas, excepto en julio, agosto y los periodos de vacaciones escolares de Navidad y Pascua", "De 16 a 20 horas, únicamente durante el primer trimestre del año", "De 14 a 17 horas, exclusivamente en las capitales de provincia"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 24.1.b) del Decreto 30/2025 establece que en las oficinas PROP que se determinen, y en todo caso en al menos una de cada provincia, se atenderá al público también los jueves de 15 a 19h, excepto durante julio y agosto, y en los periodos de vacaciones escolares de Navidad y Pascua."
+  },
+  {
+    p: "¿Cuál es el horario de atención en las oficinas presenciales durante la semana de fiestas locales del municipio donde se ubican, según el artículo 24.2 del Decreto 30/2025?",
+    ops: ["De 8h a 13h", "De 9h a 14h", "De 10h a 15h", "No hay atención presencial durante toda esa semana"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 24.2 del Decreto 30/2025 establece que, durante la semana de fiestas locales del municipio en que se sitúe cada oficina, el horario de atención será de 9h a 14h, un horario reducido respecto al general de 9h a 15h."
+  },
+  {
+    p: "Según el artículo 24.3 del Decreto 30/2025, ¿qué consideración tiene la jornada y horario del personal que presta servicios en las oficinas de atención presencial?",
+    ops: ["Consideración de jornada ordinaria general, sin ninguna especialidad respecto al resto del personal", "Consideración de jornada y horario especial, en los términos del artículo 10 del Decreto 42/2019", "Consideración de jornada reducida obligatoria del 75%, por la especial atención al público", "Consideración de personal directivo, con exclusión del régimen general de jornada"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 24.3 del Decreto 30/2025 remite expresamente al art. 10 del Decreto 42/2019 (jornadas y horarios especiales), estableciendo que, por razón de la actividad realizada en las oficinas de atención presencial, la jornada y horario del personal que presta servicios en ellas tendrá la consideración de especial."
+  },
+  {
+    p: "¿Qué requisito se exige cuando la modificación de horarios de atención al público suponga un cambio en las condiciones de trabajo del personal, según el artículo 24.6 del Decreto 30/2025?",
+    ops: ["Ninguno; el órgano competente puede modificar el horario libremente sin trámite adicional", "Será necesaria la negociación con las organizaciones sindicales en los términos de la normativa que regula las condiciones de trabajo del personal funcionario", "Solo se requiere informe no vinculante de la junta de personal, sin necesidad de negociación formal", "Se exige la aprobación previa del Consell Jurídic Consultiu mediante dictamen preceptivo"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 24.6 del Decreto 30/2025 establece que, cuando la modificación de horarios suponga un cambio en las condiciones de trabajo del personal empleado público, será necesaria la negociación con las organizaciones sindicales en los términos previstos en la normativa reguladora de las condiciones de trabajo del personal funcionario (Decreto 42/2019)."
+  },
+  {
+    p: "¿A través de qué medios se puede concertar cita previa para la atención presencial, según el artículo 25.2 del Decreto 30/2025?",
+    ops: ["Únicamente a través de la sede PROP, sin otras opciones alternativas", "A través de la sede PROP, del servicio de atención telefónica 012, y de las oficinas y puntos PROP, sin perjuicio de otros medios que se puedan habilitar", "Exclusivamente mediante llamada telefónica al servicio 012", "Solo de forma presencial en la propia oficina donde se pretende realizar el trámite"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 25.2 del Decreto 30/2025 establece que se podrá concertar cita previa a través de la sede PROP, del servicio de atención telefónica 012, y de las oficinas y puntos PROP, sin perjuicio de otros medios que puedan habilitarse en el futuro."
+  },
+  {
+    p: "¿Es obligatoria la cita previa para acceder a los servicios de atención presencial, según el artículo 25.5 del Decreto 30/2025?",
+    ops: ["Sí, es obligatoria en todos los casos sin excepción, para garantizar la organización de los recursos", "No; debe garantizarse un mínimo de atención sin cita previa, salvo en servicios específicos en que, excepcionalmente, se determine mediante resolución motivada por razón de la personalización del servicio", "Sí, pero solo en las oficinas PROP de las tres capitales de provincia", "No es obligatoria en ningún caso, ni siquiera en los servicios más especializados"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 25.5 del Decreto 30/2025 establece que debe garantizarse un mínimo de atención sin cita previa, que no será obligatoria salvo en los servicios específicos en que, de forma excepcional, así se determine mediante resolución motivada por razón de la personalización de los servicios o especificidad de la materia."
+  },
+  {
+    p: "¿A través de qué números se puede acceder al servicio de información telefónica 012, según el artículo 27.2 del Decreto 30/2025?",
+    ops: ["Únicamente a través del número 012, sin alternativas para llamadas desde fuera de la Comunitat Valenciana", "A través de los números 012 y 963866000, siendo obligatorio este último para llamadas efectuadas desde fuera de la Comunitat Valenciana", "A través del número 900123456, gratuito desde cualquier país", "Exclusivamente a través del número gratuito 900012012"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.2 del Decreto 30/2025 establece que se puede acceder al servicio 012 a través de los números 012 y 963866000, este último obligatorio para llamadas desde fuera de la Comunitat Valenciana, añadiendo el prefijo +34 o 0034 si la llamada se efectúa desde fuera de España."
+  },
+  {
+    p: "¿Qué conselleria gestiona el servicio de atención telefónica 012, según el artículo 27.3 del Decreto 30/2025?",
+    ops: ["La conselleria competente en materia de hacienda y presupuestos", "La conselleria competente en materia de atención a la ciudadanía", "La conselleria competente en materia de administración pública y función pública", "La conselleria competente en materia de tecnologías de la información"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.3 del Decreto 30/2025 establece que el servicio de atención telefónica 012 es gestionado por la conselleria competente en materia de atención a la ciudadanía, la misma que gestiona las oficinas PROP y define su imagen corporativa."
+  },
+  {
+    p: "¿Cuál de los siguientes servicios SÍ se presta desde el teléfono 012, según el artículo 27.4 del Decreto 30/2025?",
+    ops: ["Resolver directamente recursos administrativos presentados por la ciudadanía", "Facilitar información general sobre trámites y procedimientos, así como sobre ofertas de empleo público de la Administración y sector público de la Generalitat", "Emitir certificados oficiales con validez jurídica plena sin necesidad de comparecencia posterior", "Realizar el pago telefónico de tasas administrativas mediante tarjeta de crédito"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.4.a) del Decreto 30/2025 establece entre los servicios del teléfono 012 facilitar información general sobre cualquier trámite o procedimiento ante la Administración autonómica, así como sobre las ofertas de empleo público de la Administración y el sector público instrumental de la Generalitat."
+  },
+  {
+    p: "¿Cuál es el horario de atención por agentes del servicio telefónico 012, según el artículo 27.8 del Decreto 30/2025?",
+    ops: ["De lunes a viernes de 8h a 20h, todo el año sin excepción", "De lunes a viernes de 08.00 a 19.00 horas, y en agosto de 08.00 a 16.00 horas, excepto festivos nacionales, autonómicos y los días 24 y 31 de diciembre", "De lunes a sábado de 9h a 18h, incluidos los festivos autonómicos", "De lunes a viernes de 9h a 21h, con reducción a 9h-14h en agosto"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.8 del Decreto 30/2025 establece que el horario de atención por agentes será de lunes a viernes de 08.00 a 19.00 horas, y en agosto de 08.00 a 16.00 horas, excepto los días festivos de ámbito nacional, festivos de la Comunitat Valenciana, y los días 24 y 31 de diciembre."
+  },
+  {
+    p: "¿Qué garantiza el servicio 012 respecto de las consultas que se realizan, según el artículo 27.6 del Decreto 30/2025?",
+    ops: ["La resolución de la consulta en un plazo máximo de 24 horas", "La absoluta confidencialidad de las consultas que se realizan y de las respuestas que se ofrecen", "La grabación pública de todas las llamadas, accesible mediante solicitud de transparencia", "La gratuidad total de la llamada, sin coste alguno para el usuario en cualquier circunstancia"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.6 del Decreto 30/2025 establece que el servicio 012 garantizará la absoluta confidencialidad de las consultas que se realizan y de las respuestas que se ofrecen, en línea con la protección de datos personales de los usuarios del servicio."
+  },
+  {
+    p: "¿Con qué finalidad se graban las llamadas al servicio 012, según el artículo 27.10 del Decreto 30/2025?",
+    ops: ["Con fines exclusivamente estadísticos, sin relación con la atención de quejas", "Para mejorar la calidad del servicio, atender mejor las quejas y reclamaciones y poder resolver cuestiones suscitadas sobre la atención prestada, previa información al usuario sobre su derecho a la protección de datos", "Para su publicación íntegra en el Portal de Transparencia de la Generalitat", "Únicamente con fines de formación del nuevo personal contratado en el servicio"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.10 del Decreto 30/2025 establece que las llamadas se graban para mejorar la calidad del servicio, atender mejor las quejas y reclamaciones, y resolver cuestiones sobre la atención prestada, previa información al usuario sobre su derecho a la protección de datos personales. Las grabaciones se conservan un periodo determinado y luego se eliminan."
+  },
+  {
+    p: "¿Qué se establece sobre los teléfonos de asistencia especializada, según el artículo 28.1 del Decreto 30/2025?",
+    ops: ["Solo pueden crearse por acuerdo del Consell, sin intervención de otros departamentos", "Podrán habilitarse con las funciones y características que establezca el departamento u organismo competente en la materia, previa petición de informe al órgano competente en materia de atención a la ciudadanía", "Sustituyen automáticamente al servicio 012 en las materias de su especialidad", "Solo pueden ser gestionados directamente por la conselleria competente en atención a la ciudadanía"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 28.1 del Decreto 30/2025 establece que los teléfonos de asistencia e información especializada podrán habilitarse con las funciones y características que en cada caso establezca el departamento u organismo competente en la materia, previa petición de informe al órgano competente en materia de atención a la ciudadanía."
+  },
+  {
+    p: "¿Puede tener carácter temporal la habilitación de un teléfono de asistencia especializada, según el artículo 28.2 del Decreto 30/2025?",
+    ops: ["No, todos los teléfonos especializados deben tener carácter permanente e indefinido", "Sí, especialmente cuando se trate de campañas de temática específica con un volumen muy alto de consultas durante un periodo temporal determinado", "Solo puede ser temporal si lo autoriza previamente el Consejo de Ministros", "No, la temporalidad está expresamente prohibida por el Decreto para evitar confusión en la ciudadanía"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 28.2 del Decreto 30/2025 establece que la habilitación de un teléfono de asistencia especializada podrá tener carácter temporal, especialmente en campañas de temática específica en las que se prevea un volumen muy alto de consultas durante un periodo temporal muy determinado."
+  },
+  {
+    p: "Según el artículo 27.7 del Decreto 30/2025, ¿qué ocurre con las consultas de carácter especializado que no puedan responderse desde el SIAC en el servicio 012?",
+    ops: ["Se descartan sin más trámite, indicando al usuario que contacte directamente con la Conselleria", "Se derivan para ser atendidas por los departamentos competentes, que están obligados a atender debidamente estas consultas de segundo nivel", "Se remiten automáticamente al Síndic de Greuges para su resolución", "Quedan pendientes hasta que el propio servicio 012 adquiera la formación especializada necesaria"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.7 del Decreto 30/2025 establece que las consultas de información especializada que no puedan responderse con la información del SIAC se derivan a los departamentos competentes, cuyos contactos deben figurar actualizados en el catálogo de procedimientos, siendo obligación de dichos órganos atender debidamente estas consultas de segundo nivel."
+  },
+  {
+    p: "¿Qué información debe facilitarse cuando la llamada al servicio 012 tenga coste para la persona usuaria, según el artículo 27.11 del Decreto 30/2025?",
+    ops: ["No es necesario informar del coste, ya que la llamada es siempre gratuita", "Se informará de este coste como mínimo en la sede PROP, difundiendo además las formas de acceso con menor coste, como el uso de numeración fija", "Solo se informa del coste si el usuario lo solicita expresamente durante la llamada", "El coste se comunica exclusivamente mediante factura mensual enviada al domicilio del usuario"],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El art. 27.11 del Decreto 30/2025 establece que en caso de que la llamada al 012 tenga coste, se informará de ello como mínimo en la sede PROP, y se difundirán en portales corporativos y campañas informativas las formas de acceso que supongan menor coste, como el uso de numeración fija."
+  }
+];
+
+// ── ALEATORIZACIÓN ──
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function prepararPreguntas() {
+  const mezcladas = shuffle(BANCO);
+  return mezcladas.map(q => {
+    const textoCorrecta = q.ops[q.c];
+    const opsNuevas = shuffle(q.ops);
+    const nuevoC = opsNuevas.indexOf(textoCorrecta);
+    return { p: q.p, ops: opsNuevas, c: nuevoC, exp: q.exp };
+  });
+}
+
+let preguntas = [];
+let respondidas = 0, correctas = 0, incorrectas = 0;
+
+function actualizarBarra() {
+  const pct = preguntas.length ? (respondidas / preguntas.length) * 100 : 0;
+  document.getElementById('barraFill').style.width = pct + '%';
+  document.getElementById('barraNum').textContent = respondidas + ' / ' + preguntas.length;
+  document.getElementById('scoreOk').textContent = '✓ ' + correctas;
+  document.getElementById('scoreKo').textContent = '✗ ' + incorrectas;
+}
+
+function responder(qi, oi) {
+  const q = preguntas[qi];
+  const btns = document.querySelectorAll('[data-qi="' + qi + '"]');
+  btns.forEach(b => b.disabled = true);
+  btns.forEach((b, j) => {
+    if (j === q.c) b.classList.add('correcta');
+    else if (j === oi && oi !== q.c) b.classList.add('incorrecta');
+  });
+  document.getElementById('exp-' + qi).classList.add('visible');
+  respondidas++;
+  if (oi === q.c) correctas++; else incorrectas++;
+  actualizarBarra();
+  if (respondidas === preguntas.length) setTimeout(mostrarResultado, 700);
+}
+
+function mostrarResultado() {
+  const pct = Math.round((correctas / preguntas.length) * 100);
+  document.getElementById('resPunt').innerHTML = correctas + ' <span>/ ' + preguntas.length + '</span>';
+  document.getElementById('resCorr').textContent = correctas;
+  document.getElementById('resIncorr').textContent = incorrectas;
+  document.getElementById('resPct').textContent = pct + '%';
+
+  let txt, col, bg;
+  if (pct >= 90)      { txt = '🏆 Sobresaliente'; col = '#166534'; bg = '#f0fdf4'; }
+  else if (pct >= 75) { txt = '✅ Notable';        col = '#1e3a5f'; bg = '#eff6ff'; }
+  else if (pct >= 60) { txt = '📘 Aprobado';       col = '#92400e'; bg = '#fffbeb'; }
+  else                { txt = '❌ Insuficiente — ¡Sigue practicando!'; col = '#991b1b'; bg = '#fef2f2'; }
+
+  document.getElementById('resCalif').innerHTML =
+    '<span class="calif-badge" style="background:' + bg + ';color:' + col + '">' + txt + '</span>';
+
+  const el = document.getElementById('resultado');
+  el.classList.add('visible');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function render() {
+  respondidas = 0; correctas = 0; incorrectas = 0;
+  preguntas = prepararPreguntas();
+  actualizarBarra();
+
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '';
+  const letras = ['A','B','C','D'];
+
+  preguntas.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const opsHTML = q.ops.map((op, j) =>
+      `<button class="opcion" data-qi="${i}" onclick="responder(${i},${j})">
+        <span class="letra">${letras[j]})</span><span>${op}</span>
+      </button>`
+    ).join('');
+    card.innerHTML =
+      `<div class="card-num">Pregunta ${i + 1} de ${preguntas.length}</div>
+       <div class="card-pregunta">${q.p}</div>
+       <div class="opciones">${opsHTML}</div>
+       <div class="explicacion" id="exp-${i}">${q.exp}</div>`;
+    main.appendChild(card);
+  });
+
+  const sep = document.createElement('div');
+  sep.className = 'divider';
+  sep.textContent = 'Fin del test';
+  main.appendChild(sep);
+
+  const res = document.createElement('div');
+  res.className = 'resultado';
+  res.id = 'resultado';
+  res.innerHTML =
+    `<div class="resultado-eyebrow">Resultado final</div>
+     <h2>Test completado</h2>
+     <div class="resultado-nota" id="resPunt">0 <span>/ 50</span></div>
+     <div id="resCalif"></div>
+     <div class="stats">
+       <div class="stat"><div class="stat-num" id="resCorr" style="color:#166534">0</div><div class="stat-lab">Correctas</div></div>
+       <div class="stat"><div class="stat-num" id="resIncorr" style="color:#991b1b">0</div><div class="stat-lab">Incorrectas</div></div>
+       <div class="stat"><div class="stat-num" id="resPct">0%</div><div class="stat-lab">% aciertos</div></div>
+     </div>
+     <p class="resultado-hint">Desplázate hacia arriba para revisar las explicaciones de cada pregunta.</p>
+     <button class="btn btn-naranja" onclick="render(); window.scrollTo({top:0,behavior:'smooth'})">↺ Repetir con nuevo orden</button>`;
+  main.appendChild(res);
+}
+
+render();
+</script>
+</body>
+</html>
